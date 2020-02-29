@@ -1,0 +1,9 @@
+{
+    "name": "assignment-1-socket-chat",
+    "version": "0.0.1",
+    "description": "assignment 1 for full stack dev. II",
+    "dependencies": {
+        "express": "^4.15.2",
+        "socket.io": "^2.3.0"
+    }
+}
