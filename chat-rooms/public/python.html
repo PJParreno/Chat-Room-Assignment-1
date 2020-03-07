@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+      integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+      crossorigin="anonymous"
+    />
+
+    <style>
+      form {
+        padding: 30px;
+        position: fixed;
+        bottom: 0;
+        width: 50%;
+        padding-right: 50px;
+      }
+      #messages {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+        width: 100%;
+      }
+      #messages li {
+        padding: 5px 10px;
+      }
+      #messages li:nth-child(even) {
+        color: white;
+        background: green;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="jumbotron">
+        <h1>Welcome to our chat app</h1>
+        <h2>Change Rooms</h2>
+        <ui>
+          <a class="btn btn-primary" href="/javascript">javascript</a>
+          <a class="btn btn-primary" href="/swift">Swift</a>
+          <a class="btn btn-primary" href="/python">Python</a>
+        </ui>
+
+
+        <div class="input-group mb-3">
+            <input id="username" type="text" class="form-control" placeholder="Set username" aria-label="Recipient's username" aria-describedby="basic-addon2">
+            <div class="input-group-append">
+              <button class="btn btn-outline-secondary" type="button" onclick="setUsername()">Button</button>
+            </div>
+          </div>
+
+      </div>
+    </div>
+
+    <div class="container">
+            <div class="jumbotron">
+
+
+      <h1>Python Chat</h1>
+      <div class="container-fluid">
+        <div class="row">
+          <ui id="messages"></ui>
+        </div>
+        <div class="row">
+          <div clas="col-xs-12">
+            <form id="message-form" action="">
+              <div class="input-group">
+                <input id="m" autocomplete="off" type="text" class="form-control" placeholder="messages..." aria-label="Message...."/>
+                <span class="input-group-btn">
+                  <button class="btn btn-success" type="submit">Send</button>
+                </span>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+            </div>
+    </div>
+
+    <script
+      src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+      integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+      integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+      integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+      crossorigin="anonymous"
+    ></script>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+      const room = "python";
+      const socket = io.connect("/tech");
+
+      $("form").submit(() => {
+        let msg = $("#m").val();
+        socket.emit("message", { msg, room });
+        $("#m").val("");
+        return false;
+      });
+      socket.on("connect", () => {
+      });
+      socket.on("message", msg => {
+        $("#messages").append($("<li>").text(msg));
+      });
+      function setUsername() 
+      {
+          socket.emit('setUsername', document.getElementById('username').value);
+          document.getElementById('username').value = '';
+
+          socket.emit("join", { room: room , username: username});
+
+      };
+    </script>
+  </body>
+</html>
